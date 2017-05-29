@@ -18,23 +18,21 @@ public class Menu {
 			System.out.println("3 - SAIR: ");
 			op = teclado.nextInt();
 
-			int mes = 0;
-			int semana = 0;
-			boolean mesInvalido = mes < 1 || mes > 12;
-			boolean semanaInvalida = semana < 1 || semana > 52;
-
 			if (op == 1) {
+				int mes = 0;
+				int semana = 0;
 				AgendaSemanal agendaSemanal;
 
-				while (mesInvalido || semanaInvalida) {
-					mes = informarMes();
-					semana = informarSemana();
+				while ((mes < 1 || mes > 12) || (semana < 1 || semana > 52)) {
+					System.out.println("Informe um mês (1 - 12): ");
+					mes = teclado.nextInt();
+					System.out.println("Informe uma semana (1 - 52): ");
+					semana = teclado.nextInt();
 
-					if (mesInvalido) {
+					if (mes < 1 || mes > 12) {
 						System.out.println("Por favor, informe um mês válido.");
-					} else if (semanaInvalida) {
-						System.out
-								.println("Por favor, informe uma semana válida.");
+					} else if (semana < 1 || semana > 52) {
+						System.out.println("Por favor, informe uma semana válida.");
 					} else {
 						agendaSemanal = new AgendaSemanal(mes, semana);
 						File arquivoAgenda = new File("2017" + mes + ""
@@ -44,30 +42,73 @@ public class Menu {
 				}
 
 			} else if (op == 2) {
-				// TODO: Desenvolver.
+				//Objeto abaixo instanciado apenas para ser utilizado 
+				//enquanto o salvamento e leitura de arquivos não for completado.
+				AgendaSemanal agendaSemanal = new AgendaSemanal();
+				// TODO: Carregar agenda.
+				
+				int op2 = 0;
+				
+				do {			
+				
+				System.out.println("");
+				System.out.println("--MENU AGENDA--");
+				System.out.println("");
+				System.out.println("1 - Exibir toda a agenda: ");
+				System.out.println("2 - Marcar consulta: ");
+				System.out.println("3 - Desmarcar consulta: ");
+				System.out.println("4 - Alterar dia e/ou horário da consulta: ");
+				System.out.println("5 - Exibir as consultas marcadas em intervalos de dias e horários: ");
+				System.out.println("6 - Exibir as consultas em fila de espera para o dia: ");
+				System.out.println("7 - Exibir os horários livres para o dia: ");
+				System.out.println("8 - Criar matriz: ");
+				System.out.println("9 - Salvar agenda: ");
+				System.out.println("10 - SAIR: ");
+				System.out.println("");
+				op2 = teclado.nextInt();
+				
+				if(op2 == 1){
+					agendaSemanal.exibirTodaAAgenda();
+				}else if(op2 == 2){
+					
+				}else if(op2 == 3){
+					
+				}else if(op2 == 4){
+					
+				}else if(op2 == 5){
+					
+				}else if(op2 == 6){
+					mostraMenuDiasDaSemana();
+					int diaDaSemana = 5;
+					diaDaSemana = teclado.nextInt();
+					while(diaDaSemana < 0 || diaDaSemana > 4){
+						System.out.println("Por favor, informe um dia válido.");
+						diaDaSemana = teclado.nextInt();
+					}
+					agendaSemanal.exibirFilaDeEsperaParaDiaEspecifico(diaDaSemana);
+				}else if(op2 == 7){
+					
+				}else if(op2 == 8){
+					
+				}else if(op2 == 9){
+					
+				}
+				
+				} while (op2 != 10);
 			}
 
 		} while (op != 3);
 		teclado.close();
 
 	}
-
-	private static int informarMes() {
-		Scanner teclado = new Scanner(System.in);
-		int mes;
-		System.out.println("Informe um mês (1 - 12): ");
-		mes = teclado.nextInt();
-		teclado.close();
-		return mes;
-	}
-
-	private static int informarSemana() {
-		Scanner teclado = new Scanner(System.in);
-		int semana;
-		System.out.println("Informe uma semana (1 - 52): ");
-		semana = teclado.nextInt();
-		teclado.close();
-		return semana;
+	
+	public static void mostraMenuDiasDaSemana(){
+		System.out.println("0 - Segunda-Feira");
+		System.out.println("1 - Terça-Feira");
+		System.out.println("2 - Quarta-Feira");
+		System.out.println("3 - Quinta-Feira");
+		System.out.println("4 - Sexta-Feira");
+		System.out.println("");
 	}
 
 }
