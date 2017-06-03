@@ -42,7 +42,7 @@ public class AgendaSemanal {
 					System.out.println("");
 					this.mostrarAgendaParaDiaEspecifico(i);
 				} else if (i == 1) {
-					System.out.println("-- Terça-Feira --");
+					System.out.println("-- Terï¿½a-Feira --");
 					System.out.println("");
 					this.mostrarAgendaParaDiaEspecifico(i);
 				} else if (i == 2) {
@@ -70,7 +70,7 @@ public class AgendaSemanal {
 				StaticQueue<Consulta> filaArmazenamento = new StaticQueue<Consulta>(this.consultasEEsperas[diaDaSemana].getFilaEspera().numElements());
 				while(!this.consultasEEsperas[diaDaSemana].getFilaEspera().isEmpty()){
 					System.out.println("Cliente: " + this.consultasEEsperas[diaDaSemana].getFilaEspera().front().getNome());
-					System.out.println("Horário: " + this.consultasEEsperas[diaDaSemana].getFilaEspera().front().getHorario());
+					System.out.println("Horï¿½rio: " + this.consultasEEsperas[diaDaSemana].getFilaEspera().front().getHorario());
 					System.out.println("Tipo: " + this.consultasEEsperas[diaDaSemana].getFilaEspera().front().getTipo());
 					filaArmazenamento.enqueue(this.consultasEEsperas[diaDaSemana].getFilaEspera().dequeue());
 				}
@@ -84,7 +84,7 @@ public class AgendaSemanal {
 	private void mostrarAgendaParaDiaEspecifico(int diaDaSemana) {
 		for(int j = 0; j < this.consultasEEsperas[diaDaSemana].getListaConsultas().numElements; j++){
 			System.out.println("Cliente: " + this.consultasEEsperas[diaDaSemana].getListaConsultas().get(j).getNome());
-			System.out.println("Horário: " + this.consultasEEsperas[diaDaSemana].getListaConsultas().get(j).getHorario());
+			System.out.println("Horï¿½rio: " + this.consultasEEsperas[diaDaSemana].getListaConsultas().get(j).getHorario());
 		}
 	}
 
