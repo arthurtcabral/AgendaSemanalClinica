@@ -24,20 +24,22 @@ public class Menu {
 				int semana = 0;
 				AgendaSemanal agendaSemanal;
 
-				while ((mes < 1 || mes > 12) || (semana < 1 || semana > 4)) {
+				while ((mes < 1 || mes > 12) || (semana < 1 || semana > 52)) {
 					System.out.println("Informe um m�s (1 - 12): ");
 					mes = teclado.nextInt();
-					System.out.println("Informe uma semana (1 - 4): ");
+					System.out.println("Informe uma semana (1 - 52): ");
 					semana = teclado.nextInt();
 
 					if (mes < 1 || mes > 12) {
 						System.out.println("Por favor, informe um m�s v�lido.");
-					} else if (semana < 1 || semana > 4) {
+					} else if (semana < 1 || semana > 52) {
 						System.out.println("Por favor, informe uma semana v�lida.");
 					} else {
-						
-						agendaSemanal = agendaUtil.criarAgenda(mes, semana);
-						
+						try{
+							agendaSemanal = agendaUtil.criarAgenda(mes, semana);
+						}catch(Exception e){
+							System.out.println(e);
+						}
 					}
 				}
 
