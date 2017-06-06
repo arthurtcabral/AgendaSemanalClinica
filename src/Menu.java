@@ -44,10 +44,11 @@ public class Menu {
 				}
 
 			} else if (op == 2) {
-				//Objeto abaixo instanciado apenas para ser utilizado 
-				//enquanto o salvamento e leitura de arquivos n�o for completado.
-				AgendaSemanal agendaSemanal = new AgendaSemanal();
-				// TODO: Carregar agenda.
+				
+				//TODO: Ler do teclado med e semana para passar por parâmetro
+				try{
+					AgendaSemanal agendaSemanal =  agendaUtil.carregarAgenda(1, 1);
+				
 				
 				int op2 = 0;
 				
@@ -97,7 +98,13 @@ public class Menu {
 				}
 				
 				} while (op2 != 10);
+				
+				
+				}catch(Exception e){
+					System.out.println(e);
+				}
 			}
+				
 
 		} while (op != 3);
 		teclado.close();
