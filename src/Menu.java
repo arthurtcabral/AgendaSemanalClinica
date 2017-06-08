@@ -73,9 +73,29 @@ public class Menu {
 				if(op2 == 1){
 					agendaSemanal.exibirTodaAAgenda();
 				}else if(op2 == 2){
+					int diaDaSemana, horario, tipo, tolerancia;
+					String nome;
 					
+					System.out.println("Dia da semana:");
+					diaDaSemana = teclado.nextInt();
+					System.out.println("Horário");
+					horario = teclado.nextInt();
+					System.out.println("Nome:");
+					nome = teclado.next();
+					System.out.println("Tipo:");
+					tipo = teclado.nextInt();
+					System.out.println("Tolerância:");
+					tolerancia = teclado.nextInt();
+					
+					agendaSemanal.marcarConsulta(diaDaSemana, horario, nome, tipo, tolerancia);
 				}else if(op2 == 3){
+					int diaDaSemana, horario;
+					System.out.println("Dia da semana:");
+					diaDaSemana = teclado.nextInt();
+					System.out.println("Horário");
+					horario = teclado.nextInt();
 					
+					agendaSemanal.desmarcarConsulta(diaDaSemana, horario);
 				}else if(op2 == 4){
 					
 				}else if(op2 == 5){

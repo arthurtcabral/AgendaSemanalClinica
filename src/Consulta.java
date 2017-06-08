@@ -29,4 +29,20 @@ public class Consulta {
 		return tolerancia;
 	}
 
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public void setHorario(int horario) {
+		this.horario = horario;
+	}
+
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
+	}
+
+	public void setTolerancia(int tolerancia) {
+		this.tolerancia = tolerancia;
+	}
+
 }
