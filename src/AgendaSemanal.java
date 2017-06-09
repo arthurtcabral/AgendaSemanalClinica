@@ -101,7 +101,6 @@ public class AgendaSemanal {
 		if (validarConsulta(consulta)) {
 			SinglyLinkedList<Consulta> listaConsultas = this.consultasEEsperas[diaDaSemana].getListaConsultas();
 			StaticQueue<Consulta> filaEspera = this.consultasEEsperas[diaDaSemana].getFilaEspera();
-
 			if (listaConsultas.numElements == horariosValidos.length) {
 				System.out.println("Não há mais consultas disponíveis nesse dia.");
 				if (filaEspera.isFull()) {
@@ -114,12 +113,14 @@ public class AgendaSemanal {
 
 			else if (listaConsultas.isEmpty()) {
 				listaConsultas.insertFirst(consulta);
+				incrementarNumeroConsultas(this.consultasEEsperas[diaDaSemana]);
 			}
 
 			else {
 				int index = horarioDisponivel(diaDaSemana, horario);
 				if (index != -1) {
 					listaConsultas.insert(consulta, index);
+					incrementarNumeroConsultas(this.consultasEEsperas[diaDaSemana]);
 				} else {
 					System.out.println("Esse horário não está disponível.");
 					if (tolerancia == 0) {
@@ -139,6 +140,7 @@ public class AgendaSemanal {
 							int horaAnterior = getHorarioAnterior(horario);
 							consulta.setHorario(horaAnterior);
 							listaConsultas.insert(consulta, indiceHorarioAnt);
+							incrementarNumeroConsultas(this.consultasEEsperas[diaDaSemana]);
 							System.out.println("Consulta marcada para " + horaAnterior + " pela regra de tolerância.");
 							return;
 						}
@@ -149,6 +151,7 @@ public class AgendaSemanal {
 							int horaSeguinte = getHorarioSeguinte(horario);
 							consulta.setHorario(horaSeguinte);
 							listaConsultas.insert(consulta, indiceHorarioSeguinte);
+							incrementarNumeroConsultas(this.consultasEEsperas[diaDaSemana]);
 							System.out.println("Consulta marcada para " + horaSeguinte + " pela regra de tolerância.");
 						}
 
@@ -169,6 +172,7 @@ public class AgendaSemanal {
 							int horaDisponivel = getHorarioDisponivel(diaDaSemana);
 							consulta.setHorario(horaDisponivel);
 							listaConsultas.insert(consulta, indiceHorarioDisponivel);
+							incrementarNumeroConsultas(this.consultasEEsperas[diaDaSemana]);
 							System.out
 									.println("Consulta marcada para " + horaDisponivel + " pela regra de tolerância.");
 						} else {
@@ -211,6 +215,52 @@ public class AgendaSemanal {
 		return null;
 	}
 
+	public void mostrarConsultaNoIntervalo(int dia1, int dia2, int hora1, int hora2){
+		if(!horarioValido(hora1) || !horarioValido(hora2)){
+			System.out.println("Os horários estão inválidos.");
+			return;
+		}
+		else if(dia1 > dia2){
+			System.out.println("O primeiro dia deve ser menor que o segundo.");
+			return;
+		}
+		else if((dia1 < 0 || dia1 > 4) || (dia2 < 0 || dia2 > 4)){
+			System.out.println("O intervalo de dias é do número 0 (Segunda-feira) ao 4 (Sexta-feira).");
+			return;
+		}
+		
+		for (int i = dia1; i <= dia2; i++) {
+			System.out.println("Dia " + i + "\nConsultas");
+			Node<Consulta> current = this.consultasEEsperas[i].getListaConsultas().head;
+			while (current != null) {
+				if(i == dia1){
+					if(current.getElement().getHorario() >= hora1)
+						System.out.println(current.getElement());
+				}
+				else if(i == dia2){
+					if(current.getElement().getHorario() <= hora2)
+						System.out.println(current.getElement());
+				}else{
+					System.out.println(current.getElement());
+				}
+				current = current.getNext();
+
+				System.out.println("------------------------------------------------------");
+			}
+			System.out.println("======================================================");
+			
+		}
+	}
+	
+	private void incrementarNumeroConsultas(CadaDia dia){
+		dia.setQuantidadeConsultas(dia.getQuantidadeConsultas() + 1);
+	}
+	
+	
+	private void decrementarNumeroConsultas(CadaDia dia){
+		dia.setQuantidadeConsultas(dia.getQuantidadeConsultas() - 1);
+	}
+	
 	private boolean validarConsulta(Consulta c) {
 		if (c.getHorario() < 100 || c.getHorario() > 9999) {
 			System.out.println("Formato da hora inválido.");
@@ -232,6 +282,7 @@ public class AgendaSemanal {
 		int index = 0;
 		while (current != null) {
 			if (current.getElement().getHorario() == horario) {
+				decrementarNumeroConsultas(this.consultasEEsperas[diaDaSemana]);
 				this.consultasEEsperas[diaDaSemana].getListaConsultas().remove(index);
 				return;
 			}
@@ -263,6 +314,7 @@ public class AgendaSemanal {
 		if (c != null) {
 			int index = horarioDisponivel(diaDaSemana, horario);
 			this.consultasEEsperas[diaDaSemana].getListaConsultas().insert(c, index);
+			incrementarNumeroConsultas(this.consultasEEsperas[diaDaSemana]);
 			System.out.println("A consulta de " + c.getNome() + " foi movida para a lista de consultas.");
 		}
 

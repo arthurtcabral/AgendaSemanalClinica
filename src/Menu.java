@@ -147,7 +147,20 @@ public class Menu {
 							}
 
 						} else if (op2 == 5) {
+							int dia1, dia2, hora1, hora2;
 
+							System.out.println("Do dia: ");
+							dia1 = teclado.nextInt();
+							System.out.println("Hora:");
+							hora1 = teclado.nextInt();
+							
+							System.out.println("Ao dia: ");
+							dia2 = teclado.nextInt();
+							System.out.println("Hora:");
+							hora2 = teclado.nextInt();
+							
+							agendaSemanal.mostrarConsultaNoIntervalo(dia1, dia2, hora1, hora2);
+							
 						} else if (op2 == 6) {
 							mostraMenuDiasDaSemana();
 							int diaDaSemana = 5;

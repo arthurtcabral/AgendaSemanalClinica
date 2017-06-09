@@ -34,5 +34,9 @@ public class CadaDia {
 	public StaticQueue<Consulta> getFilaEspera() {
 		return filaEspera;
 	}
+
+	public void setQuantidadeConsultas(int quantidadeConsultas) {
+		this.quantidadeConsultas = quantidadeConsultas;
+	}
 	
 }
