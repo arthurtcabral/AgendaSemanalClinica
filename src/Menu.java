@@ -103,8 +103,9 @@ public class Menu {
 						} else if (op2 == 3) {
 							int diaDaSemana, horario;
 							System.out.println("Dia da semana:");
+							System.out.println("0- Segunda-feira; 1- Terça-feira; 2- Quarta-feira; 3- Quinta-feira; 4- Sexta-feira");
 							diaDaSemana = teclado.nextInt();
-							System.out.println("Horário");
+							System.out.println("Horário (hhmm):");
 							horario = teclado.nextInt();
 
 							agendaSemanal.desmarcarConsulta(diaDaSemana, horario);

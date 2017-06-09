@@ -233,7 +233,11 @@ public class AgendaSemanal {
 			System.out.println("Dia " + i + "\nConsultas");
 			Node<Consulta> current = this.consultasEEsperas[i].getListaConsultas().head;
 			while (current != null) {
-				if(i == dia1){
+				if(i == dia1 && i == dia2){
+					if(current.getElement().getHorario() >= hora1 && current.getElement().getHorario() <= hora2)
+						System.out.println(current.getElement());
+				}
+				else if(i == dia1){
 					if(current.getElement().getHorario() >= hora1)
 						System.out.println(current.getElement());
 				}
