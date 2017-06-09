@@ -45,7 +45,7 @@ public class AgendaSemanal {
 					System.out.println("");
 					this.mostrarAgendaParaDiaEspecifico(i);
 				} else if (i == 1) {
-					System.out.println("-- Ter�a-Feira --");
+					System.out.println("-- Terça-Feira --");
 					System.out.println("");
 					this.mostrarAgendaParaDiaEspecifico(i);
 				} else if (i == 2) {
@@ -91,14 +91,14 @@ public class AgendaSemanal {
 	private void mostrarAgendaParaDiaEspecifico(int diaDaSemana) {
 		for (int j = 0; j < this.consultasEEsperas[diaDaSemana].getListaConsultas().numElements; j++) {
 			System.out.println("Cliente: " + this.consultasEEsperas[diaDaSemana].getListaConsultas().get(j).getNome());
-			System.out.println("Hor�rio: " + this.consultasEEsperas[diaDaSemana].getListaConsultas().get(j).getHorario());
+			System.out
+					.println("Hor�rio: " + this.consultasEEsperas[diaDaSemana].getListaConsultas().get(j).getHorario());
 		}
 	}
 
 	public void marcarConsulta(int diaDaSemana, int horario, String nome, int tipo, int tolerancia) {
-		if (horarioValido(horario)) {
-			Consulta consulta = new Consulta(nome, horario, tipo, tolerancia);
-
+		Consulta consulta = new Consulta(nome, horario, tipo, tolerancia);
+		if (validarConsulta(consulta)) {
 			SinglyLinkedList<Consulta> listaConsultas = this.consultasEEsperas[diaDaSemana].getListaConsultas();
 			StaticQueue<Consulta> filaEspera = this.consultasEEsperas[diaDaSemana].getFilaEspera();
 
@@ -181,10 +181,7 @@ public class AgendaSemanal {
 						}
 					}
 				}
-
 			}
-		} else {
-			System.out.println("Não há consultas nesse horário.");
 		}
 	}
 
@@ -192,14 +189,7 @@ public class AgendaSemanal {
 		if (horarioValido(horario)) {
 			if (horarioDisponivel(diaDaSemana, horario) == -1) {
 				excluirConsultaDaLista(diaDaSemana, horario);
-				
-//				Consulta consultaDaEspera = retirarDaFilaEspera(diaDaSemana, horario);
-//				
-//				if(consultaDaEspera!=null){
-//					int index = horarioDisponivel(diaDaSemana, horario);
-//					this.consultasEEsperas[diaDaSemana].getListaConsultas().insert(consultaDaEspera, index);
-//					System.out.println("Uma consulta da fila de espera foi movida para a lista de consultas.");
-//				}
+				retirarDaFilaEsperaEInserirNaListaDeConsultas(diaDaSemana, horario);
 			} else {
 				System.out.println("Não há consultas marcadas nesse horário");
 			}
@@ -208,11 +198,40 @@ public class AgendaSemanal {
 		}
 	}
 
-	private void excluirConsultaDaLista(int diaDaSemana, int horario){
+	public Consulta getConsulta(int diaDaSemana, int horario) {
+		if (horarioValido(horario)) {
+			Node<Consulta> current = this.consultasEEsperas[diaDaSemana].getListaConsultas().head;
+			while (current != null) {
+				if (current.getElement().getHorario() == horario) {
+					return current.getElement();
+				}
+				current = current.getNext();
+			}
+		}
+		return null;
+	}
+
+	private boolean validarConsulta(Consulta c) {
+		if (c.getHorario() < 100 || c.getHorario() > 9999) {
+			System.out.println("Formato da hora inválido.");
+			return false;
+		} else if (!horarioValido(c.getHorario())) {
+			return false;
+		} else if (c.getTipo() < 1 || c.getTipo() > 2) {
+			System.out.println("Tipo inválido.");
+			return false;
+		} else if (c.getTolerancia() < 0 || c.getTolerancia() > 2) {
+			System.out.println("Tolerância inválida.");
+			return false;
+		}
+		return true;
+	}
+
+	private void excluirConsultaDaLista(int diaDaSemana, int horario) {
 		Node<Consulta> current = this.consultasEEsperas[diaDaSemana].getListaConsultas().head;
 		int index = 0;
 		while (current != null) {
-			if(current.getElement().getHorario() == horario){
+			if (current.getElement().getHorario() == horario) {
 				this.consultasEEsperas[diaDaSemana].getListaConsultas().remove(index);
 				return;
 			}
@@ -220,26 +239,43 @@ public class AgendaSemanal {
 			current = current.getNext();
 		}
 	}
-	
-	private Consulta retirarDaFilaEspera(int diaDaSemana, int horario){
-		StaticQueue<Consulta> filaAux = this.consultasEEsperas[diaDaSemana].getFilaEspera();
-		int index = 0;
-		while(!filaAux.isEmpty()){
-			if(filaAux.front().getHorario() == horario){
-				return this.consultasEEsperas[diaDaSemana].getFilaEspera().remove(index);
+
+	private Consulta retirarDaFilaEsperaEInserirNaListaDeConsultas(int diaDaSemana, int horario) {
+		StaticQueue<Consulta> fila = this.consultasEEsperas[diaDaSemana].getFilaEspera();
+		StaticQueue<Consulta> filaAux = new StaticQueue<>(fila.numElements());
+
+		Consulta c = null;
+
+		boolean encontrou = false;
+		while (!fila.isEmpty()) {
+			if (fila.front().getHorario() == horario && encontrou == false) {
+				c = this.consultasEEsperas[diaDaSemana].getFilaEspera().dequeue();
+				encontrou = true;
+			} else {
+				filaAux.enqueue(fila.dequeue());
 			}
-			index++;
-			filaAux.dequeue();
 		}
-		return null;
+
+		while (!filaAux.isEmpty()) {
+			this.consultasEEsperas[diaDaSemana].getFilaEspera().enqueue(filaAux.dequeue());
+		}
+
+		if (c != null) {
+			int index = horarioDisponivel(diaDaSemana, horario);
+			this.consultasEEsperas[diaDaSemana].getListaConsultas().insert(c, index);
+			System.out.println("A consulta de " + c.getNome() + " foi movida para a lista de consultas.");
+		}
+
+		return c;
 	}
-	
+
 	private boolean horarioValido(int hora) {
 		for (int i = 0; i < horariosValidos.length; i++) {
 			if (hora == horariosValidos[i]) {
 				return true;
 			}
 		}
+		System.out.println("As consultas devem ser marcadas de 30 em 30 minutos entre 7:30 e 22:30.");
 		return false;
 	}
 
@@ -249,6 +285,8 @@ public class AgendaSemanal {
 		while (current != null) {
 			if (current.getElement().getHorario() == horario) {
 				return -1;
+			} else if (current.getElement().getHorario() > horario) {
+				return index;
 			}
 			current = current.getNext();
 			index++;
